@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 20th Birthday</title>
+    
+    <!-- Tailwind CSS 설정 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'paper': '#FAF9F6',
+                        'ink': '#2C2C2C',
+                        'rose-gold': '#B78484',
+                        'dusty-rose': '#E2C2C2',
+                        'champagne': '#F4EBE1'
+                    },
+                    fontFamily: {
+                        'serif': ['"Noto Serif KR"', '"Playfair Display"', 'serif'],
+                        'script': ['"Alex Brush"', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Noto+Serif+KR:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: theme('colors.paper');
+            color: theme('colors.ink');
+            overflow-x: hidden;
+            letter-spacing: -0.02em;
+        }
+
+        /* 샴페인 빛무리(Bokeh) 효과 */
+        .bokeh {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(226,194,194,0.4) 0%, rgba(244,235,225,0) 70%);
+            pointer-events: none;
+            z-index: 10;
+            animation: drift linear infinite;
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translateY(110vh) scale(0.5);
+                opacity: 0;
+            }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% {
+                transform: translateY(-10vh) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* 부드러운 부유 애니메이션 */
+        .float-animation {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 미니멀 페이드인 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 타이핑 커서 */
+        .typing-cursor {
+            display: inline-block;
+            width: 1px;
+            height: 1.1em;
+            background-color: theme('colors.rose-gold');
+            vertical-align: text-bottom;
+            animation: blink 1s step-end infinite;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* 편지지 특유의 그림자 및 질감 */
+        .premium-shadow {
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.03);
+        }
+    </style>
+</head>
+<body class="font-serif antialiased min-h-screen flex flex-col relative selection:bg-rose-gold selection:text-white">
+
+    <div id="decorations-container"></div>
+
+    <main id="intro-section" class="flex-grow flex flex-col justify-center items-center px-6 relative z-20 min-h-screen">
+        <div class="text-center mb-16 fade-in visible">
+            <!-- 영어 고급스러운 날짜 표기 -->
+            <p class="text-sm md:text-base text-gray-400 tracking-[0.3em] uppercase mb-6 font-light">October 5th, 2026</p>
+            
+            <h1 class="text-3xl md:text-5xl font-normal leading-[1.6] text-ink mb-4">
+                나의 가장 빛나는 사람,<br>
+                하연이의 <span class="italic text-rose-gold font-['Playfair_Display'] text-4xl md:text-6xl mx-2">20th</span> 생일을 축하해
+            </h1>
+            
+            <p class="text-gray-400 font-light mt-6 text-sm md:text-base tracking-widest">
+                Happy twentieth birthday to my one and only
+            </p>
+        </div>
+
+        <button id="letter-btn" class="group flex flex-col items-center cursor-pointer focus:outline-none fade-in visible float-animation mt-8">
+            <div class="w-16 h-16 md:w-20 md:h-20 rounded-full border border-dusty-rose flex items-center justify-center bg-transparent group-hover:bg-champagne transition-all duration-500">
+                <!-- 심플하고 얇은 편지 봉투 SVG 아이콘 -->
+                <svg class="w-8 h-8 text-rose-gold group-hover:text-ink transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <span class="mt-4 text-xs tracking-[0.2em] text-gray-400 group-hover:text-ink transition-colors duration-500 uppercase">
+                Read Letter
+            </span>
+        </button>
+    </main>
+
+    <div id="letter-modal" class="fixed inset-0 bg-ink/20 backdrop-blur-sm z-50 flex justify-center items-center opacity-0 pointer-events-none transition-all duration-700 hidden">
+        <div id="letter-content" class="relative max-w-xl w-full mx-4 bg-paper premium-shadow overflow-hidden transform translate-y-10 transition-all duration-700 rounded-sm">
+            
+            <!-- 미니멀 닫기 버튼 -->
+            <button id="close-modal-btn" class="absolute top-5 right-5 z-10 text-gray-400 hover:text-ink transition-colors p-2 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <!-- 편지 본문 영역 (청첩장/편지지 스타일) -->
+            <div class="p-8 md:p-14 max-h-[85vh] overflow-y-auto">
+                
+                <!-- 상단 장식 -->
+                <div class="text-center mb-10">
+                    <div class="text-2xl md:text-3xl text-rose-gold mb-4 font-medium tracking-wide">하연이에게,</div>
+                    <div class="w-12 h-[1px] bg-dusty-rose mx-auto"></div>
+                </div>
+
+                <!-- 타이핑 텍스트 영역 (동적 생성) -->
+                <div id="letter-body" class="text-base md:text-lg leading-[2.2] text-gray-600 space-y-5 font-light">
+                    <!-- 자바스크립트를 통해 p 태그가 여기에 추가됩니다 -->
+                </div>
+                
+                <!-- 서명 -->
+                <div class="mt-16 text-right opacity-0 transition-opacity duration-1000" id="signature">
+                    <p class="text-sm text-gray-400 mb-1">With all my love,</p>
+                    <p class="font-script text-3xl text-ink">Yours</p>
+                </div>
+            </div>
+            
+            <!-- 하단 은은한 그라데이션 장식 -->
+            <div class="h-2 w-full bg-gradient-to-r from-transparent via-dusty-rose to-transparent opacity-30"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const letterModal = document.getElementById('letter-modal');
+            const letterContent = document.getElementById('letter-content');
+            const letterBtn = document.getElementById('letter-btn');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const signature = document.getElementById('signature');
+            const letterBody = document.getElementById('letter-body');
+
+            // 1. 은은한 빛무리(Bokeh) 배경 효과 생성
+            function createDecorations() {
+                const container = document.getElementById('decorations-container');
+                const particleCount = 20;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'bokeh';
+                    
+                    const size = Math.random() * 150 + 50; 
+                    const left = Math.random() * 100;
+                    const duration = Math.random() * 10 + 15; 
+                    const delay = Math.random() * 10; 
+
+                    el.style.width = `${size}px`;
+                    el.style.height = `${size}px`;
+                    el.style.left = `${left}%`;
+                    el.style.animationDuration = `${duration}s`;
+                    el.style.animationDelay = `${delay}s`;
+
+                    container.appendChild(el);
+                }
+            }
+
+            // 2. 작성해주신 편지 내용
+            const letterLines = [
+                "우선 20번째 생일을 맞이한 걸 진심으로 축하해! 이제 진짜 성인이 되었네.",
+                "요즘 알바하느라 많이 지치고 힘들 텐데, 잘 해내는 모습을 보면 대견하고 기특해.",
+                "고등학교 땐 둘만의 추억이 엄청 많았던 건 아니지만, 같은 학교를 다니며 친구로 지냈다는 것 만으로도 나눌 이야기가 참 많아서 좋은 거 같아. 서로의 과거를 다 알고 있으니까 숨길 거 없이 편안한 느낌이 들어.",
+                "자기와의 과거도, 지금 함께하는 현재도 너무 좋지만, 난 언제나 자기와 함께할 미래가 제일 기대돼.",
+                "둘이서 여행도 떠나고, 언젠가 동거도 하면서 만들어갈 행복한 일상들을 기대하게 돼.",
+                "이렇게 소중한 스무 살의 생일을 나랑 함께 보내줘서 정말 고마워. 내 가장 빛나는 20대 청춘을 자기와 함께 시작할 수 있어서 너무 기쁘고 행복해.",
+                "생일 많이 축하하고, 항상 사랑해!"
+            ];
+
+            // 타이핑 애니메이션 함수
+            async function typeLine(element, text) {
+                let currentText = '';
+                const cursor = document.createElement('span');
+                cursor.className = 'typing-cursor';
+                element.appendChild(cursor);
+
+                for (let i = 0; i < text.length; i++) {
+                    currentText += text[i];
+                    element.innerHTML = currentText;
+                    element.appendChild(cursor);
+                    
+                    // 글자 수에 비례하여 적당히 빠른 속도로 타이핑
+                    const speed = Math.random() * 25 + 45; 
+                    await new Promise(resolve => setTimeout(resolve, speed));
+                }
+                
+                cursor.remove();
+                await new Promise(resolve => setTimeout(resolve, 500)); // 문단 사이 대기 시간
+            }
+
+            let isLetterTyped = false;
+
+            // 순차적으로 문단을 생성하고 타이핑하는 함수
+            async function startTypingLetter() {
+                if (isLetterTyped) return;
+                isLetterTyped = true;
+
+                for (let i = 0; i < letterLines.length; i++) {
+                    const p = document.createElement('p');
+                    p.className = "min-h-[1.5em]";
+                    letterBody.appendChild(p);
+                    await typeLine(p, letterLines[i]);
+                }
+                
+                // 편지가 끝나면 서명 등장
+                setTimeout(() => {
+                    signature.classList.remove('opacity-0');
+                }, 500);
+            }
+
+            // 3. 편지 팝업 및 닫기 이벤트
+            letterBtn.addEventListener('click', () => {
+                letterModal.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    letterModal.classList.remove('opacity-0', 'pointer-events-none');
+                    letterContent.classList.remove('translate-y-10');
+                    
+                    setTimeout(startTypingLetter, 600);
+                }, 50);
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                letterModal.classList.add('opacity-0', 'pointer-events-none');
+                letterContent.classList.add('translate-y-10');
+                
+                setTimeout(() => {
+                    letterModal.classList.add('hidden');
+                }, 700); 
+            });
+
+            letterModal.addEventListener('click', (e) => {
+                if (e.target === letterModal) {
+                    closeModalBtn.click();
+                }
+            });
+
+            createDecorations();
+        });
+    </script>
+</body>
+</html>
